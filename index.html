@@ -422,7 +422,6 @@ footer{text-align:center;color:var(--sub);font-size:.75rem;padding:24px 0 8px;}
 </div>
 
 <script type="module">
-// ==================== FIREBASE ====================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
 import { getDatabase, ref, push, set, get, query, limitToLast, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -442,14 +441,12 @@ const fbApp = initializeApp(firebaseConfig);
 try { getAnalytics(fbApp); } catch(e){ console.warn('Analytics skip:', e); }
 const db = getDatabase(fbApp);
 
-// ==================== MQTT ====================
 const MQTT_BROKER_WS = 'wss://broker.hivemq.com:8884/mqtt';
 const TOPIC_DATA     = 'rak/server/rakserver/data';
 const TOPIC_STATUS   = 'rak/server/rakserver/status';
 const TOPIC_CMD      = 'rak/server/rakserver/command';
 const TOPIC_LWT      = 'rak/server/rakserver/online';
 
-// ==================== STATE ====================
 var client = null;
 var history_ = [];
 var MAX_HIST = 5000;
@@ -461,7 +458,6 @@ var lastSavedTs = 0;
 var SAVE_INTERVAL = 30000;
 var fbDates = [];
 
-// ==================== FIREBASE ====================
 function setFbStatus(text, ok){
   document.getElementById('fbStatus').textContent = text;
   document.getElementById('fbDot').className = 'dot fb ' + (ok ? 'on' : 'off');
@@ -612,7 +608,6 @@ async function exportExcel(){
   } catch(e){ alert('Gagal: ' + e.message); }
 }
 
-// ==================== MQTT ====================
 function connectMQTT(){
   setMqttStatus('Menghubungkan...', false);
   client = mqtt.connect(MQTT_BROKER_WS, {
@@ -754,7 +749,6 @@ function updatePeltierAnim(num, on){
   wrap.classList.toggle('cold-active', on);
 }
 
-// ==================== CHART ====================
 function drawChart(){
   var c = document.getElementById('chart');
   var dpr = window.devicePixelRatio || 1;
@@ -813,7 +807,6 @@ function drawChart(){
     data.length + ' titik · ' + minV.toFixed(1) + '°C – ' + maxV.toFixed(1) + '°C';
 }
 
-// ==================== THEME ====================
 function applyTheme(n){
   document.body.classList.toggle('night',n);
   document.getElementById('themeBtn').textContent = n ? '☀️ Siang' : '🌙 Malam';
@@ -824,14 +817,12 @@ function applyTheme(n){
 function toggleTheme(){applyTheme(!document.body.classList.contains('night'));}
 (function(){var s=localStorage.getItem('night');applyTheme(s==='1');})();
 
-// ==================== INIT ====================
 connectMQTT();
 setRefreshInterval(5000);
 loadFirebaseDates();
 window.addEventListener('resize', drawChart);
 setInterval(updateDeviceStatus, 5000);
 
-// Expose global
 window.setMode = setMode;
 window.setRelay = setRelay;
 window.refreshNow = refreshNow;
